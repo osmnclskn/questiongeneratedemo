@@ -32,7 +32,6 @@ def main():
         # MIME türünün belirlenmesi
         mime = magic.Magic(mime=True)
         mime_type = mime.from_buffer(data)
-        st.write(f"MIME Type: {mime_type}")
         print(f"MIME Type: {mime_type}")
 
         # Blob oluşturma
@@ -45,7 +44,6 @@ def main():
         parser = HANDLERS.get(mime_type)
         if parser:
             documents = parser.parse(blob=blob)
-            st.write(f"Processed Data: {documents}")
             print(f"Processed Data: {documents}")
 
             # Documents içeriğini stringe çevirme
@@ -61,7 +59,7 @@ def main():
                 
 
             for idx in range(len(questions)):
-                st.write(f"{idx+1}. Question JSON Output: ")
+                st.write(f"{idx+1}. Generated Question Output: ")
                 st.json(json.dumps(questions[idx].__dict__, indent=2))
         else:
             st.error(f"No parser found for MIME Type: {mime_type}")
