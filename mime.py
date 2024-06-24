@@ -21,7 +21,7 @@ HANDLERS = {
 }
 
 def main():
-    st.title("Document Processor")
+    st.title("PQM Quality Control Question Generator")
 
     uploaded_file = st.file_uploader('Upload a file', type=["pdf", "txt", "html"])
     
