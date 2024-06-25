@@ -39,12 +39,6 @@ def process_uploaded_file(data):
         st.error(f"No parser found for MIME Type : {mime_type}")
         return None
     
-def generate_questions(documents_content,pqm_question_generator):
-    questions=[]
-    for i in range(10):
-        structured_out=pqm_question_generator.generate_question(documents_content,questions)
-        questions.append(structured_out)
-    return questions
 
 def display_questions(questions):
     for idx,question in enumerate(questions):
