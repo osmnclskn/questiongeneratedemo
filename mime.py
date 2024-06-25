@@ -21,49 +21,52 @@ HANDLERS = {
 }
 
 def get_mime_type(data):
-    mime = magic.Magic(mime=True)
+    mime=magic.Magic(mime=True)
     return mime.from_buffer(data)
 
 def process_uploaded_file(data):
-    mime_type = get_mime_type(data)
-    print(f"MIME Type: {mime_type}")
+    mime_type=get_mime_type(data)
+    print(f"Mime Type :{mime_type}")
 
-    blob = Blob.from_data(data=data, mime_type=mime_type)
+    blob=Blob.from_data(data=data,mime_type=mime_type)
     print(f"Blob created with MIME type {mime_type}")
-    parser = HANDLERS.get(mime_type)
+    parser=HANDLERS.get(mime_type)
     if parser:
-        documents = parser.parse(blob=blob)
-        print(f"Processed Data: {documents}")
-        return " ".join([doc.page_content for doc in documents])
+        documents=parser.parse(blob=blob)
+        print(f"Processed Data : {documents}")
+        return "".join([doc.page_content for doc in documents])
     else:
-        st.error(f"No parser found for MIME Type: {mime_type}")
+        st.error(f"No parser found for MIME Type : {mime_type}")
         return None
-
-def generate_questions(documents_content):
-    pqm_question_generator = PQMQualityControlQuestionGenerator()
-    questions = []
+    
+def generate_questions(documents_content,pqm_question_generator):
+    questions=[]
     for i in range(10):
-        structured_out = pqm_question_generator.generate_question(documents_content, questions)
+        structured_out=pqm_question_generator.generate_question(documents_content,questions)
         questions.append(structured_out)
     return questions
 
 def display_questions(questions):
-    for idx, question in enumerate(questions):
-        st.write(f"{idx+1}. Generated Questions Output:")
-        st.json(json.dumps(question.__dict__, indent=2))
+    for idx,question in enumerate(questions):
+        st.write(f"{idx+1}.Generated Questions Output:")
+        st.json(json.dumps(question.__dict__,indent=2))
 
 def main():
     st.title("PQM Quality Control Question Generator")
-    uploaded_file = st.file_uploader("Upload a file", type=["pdf", "txt", "html"])
+    uploaded_file=st.file_uploader("Upload a file",type=["pdf","txt","html"])
     if uploaded_file is not None:
-        st.success("File uploaded successfully!")
-        data = uploaded_file.read()
+        st.success("File uploaded succesfully!")
+        data=uploaded_file.read()
 
-        documents_content = process_uploaded_file(data)
+        mime_type=get_mime_type(data)
+        print(f"MIME Type: {mime_type}")
+        documents_content=process_uploaded_file(data)
 
         if documents_content:
-            questions = generate_questions(documents_content)
+            pqm_question_generator=PQMQualityControlQuestionGenerator()
+            questions=generate_questions(documents_content,pqm_question_generator)
             display_questions(questions)
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()
+
