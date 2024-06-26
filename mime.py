@@ -59,7 +59,7 @@ def main():
         if documents_content:
             pqm_question_generator=PQMQualityControlQuestionGenerator()
             questions=[]
-            for i in range(10):
+            for i in range(8):
                 structured_out=pqm_question_generator.generate_question(documents_content,questions)
                 questions.append(structured_out)
             display_questions(questions)
